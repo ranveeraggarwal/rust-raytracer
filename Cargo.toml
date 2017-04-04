@@ -1,0 +1,6 @@
+[package]
+name = "tracer-rs"
+version = "0.1.0"
+authors = ["Ranveer Aggarwal <ranveeraggarwal@gmail.com>"]
+
+[dependencies]
