@@ -4,7 +4,7 @@ use std::f64;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Vec3 {
-    elements: [f64; 3],
+    pub elements: [f64; 3],
 }
 
 impl Vec3 {
