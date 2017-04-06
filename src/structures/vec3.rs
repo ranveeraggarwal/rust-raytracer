@@ -30,6 +30,10 @@ impl Vec3 {
     fn b(&self) -> f64 {
         self.elements[2]
     }
+
+    fn print(&self) -> () {
+        println!("{:?}", self);
+    }
 }
 
 impl Add for Vec3 {
@@ -58,6 +62,12 @@ impl Vec3 {
     fn dot(&self, other: &Vec3) -> f64 {
         (self.x() * other.x()) + (self.y() * other.y()) + (self.z() * other.z())
     }
+}
+
+#[test]
+fn test_gen() {
+    let vec: Vec3 = Vec3::new(0.2, 0.4, 0.8);
+    vec.print();
 }
 
 #[test]
