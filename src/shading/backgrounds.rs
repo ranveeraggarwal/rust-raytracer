@@ -12,7 +12,7 @@ pub fn gen_lerp(origin: Vec3, lower_left_corner: Vec3,
             let v: f64 = y as f64/ny as f64;
             let r: Ray = Ray::new(origin, lower_left_corner + u*horizontal + v*vertical);
             let col: Vec3 = lerp(&r);
-            row.push(col);
+            row.push(255.99*col);
         }
         bg.push(row);
     }
