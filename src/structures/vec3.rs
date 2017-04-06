@@ -1,7 +1,8 @@
-use std::ops::{Add, Sub};
+use std::ops::{Add, Sub, Mul, Div};
 use std::cmp::PartialEq;
+use std::f64;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 struct Vec3 {
     elements: [f64; 3],
 }
@@ -40,7 +41,7 @@ impl Add for Vec3 {
     type Output = Vec3;
 
     fn add(self, other: Vec3) -> Vec3 {
-        Vec3 {elements: [self.x()+other.x(), self.y()+other.y(), self.z()+other.z()]}
+        Vec3 {elements: [self.x() + other.x(), self.y() + other.y(), self.z() + other.z()]}
     }
 }
 
@@ -48,7 +49,34 @@ impl Sub for Vec3 {
     type Output = Vec3;
 
     fn sub(self, other: Vec3) -> Vec3 {
-        Vec3 {elements: [self.x()-other.x(), self.y()-other.y(), self.z()-other.z()]}
+        Vec3 {elements: [self.x() - other.x(), self.y() - other.y(), self.z() - other.z()]}
+    }
+}
+
+impl Mul<f64> for Vec3 {
+    type Output = Vec3;
+
+    fn mul(self, other: f64) -> Vec3 {
+        Vec3 {elements: [self.x() * other, self.y() * other, self.z() * other]}
+    }
+}
+
+impl Mul<Vec3> for f64 {
+    type Output = Vec3;
+
+    fn mul(self, other: Vec3) -> Vec3 {
+        Vec3 {elements: [self * other.x(), self * other.y(), self * other.z()]}
+    }
+}
+
+impl Div<f64> for Vec3 {
+    type Output = Vec3;
+
+    fn div(self, other: f64) -> Vec3 {
+        if other == 0.0 {
+            return Vec3 {elements: [f64::MAX, f64::MAX, f64::MAX]};
+        }
+        Vec3 {elements: [self.x() / other, self.y() / other, self.z() / other]}
     }
 }
 
@@ -59,8 +87,22 @@ impl PartialEq for Vec3 {
 }
 
 impl Vec3 {
+    fn length(&self) -> f64 {
+        (self.x() * self.x() + self.y() * self.y() + self.z() * self.z()).sqrt()
+    }
+
+    fn unit_vector(&self) -> Vec3 {
+        Vec3{elements: [self.x() / self.length(), self.y() / self.length(), self.z() / self.length()]}
+    }
+
     fn dot(&self, other: &Vec3) -> f64 {
         (self.x() * other.x()) + (self.y() * other.y()) + (self.z() * other.z())
+    }
+
+    fn cross(&self, other: &Vec3) -> Vec3 {
+        Vec3 {elements: [self.y() * other.z() - self.z() * other.y(),
+            self.z() * other.x() - self.x() * other.z(),
+            self.x() * other.y() - self.y() * other.x()]}
     }
 }
 
@@ -87,13 +129,6 @@ fn test_rgb() {
 }
 
 #[test]
-fn test_dot() {
-    let vec_1: Vec3 = Vec3::new(0.2, 0.4, 0.7);
-    let vec_2: Vec3 = Vec3::new(0.1, 0.3, 0.3);
-    assert_eq!(vec_1.dot(&vec_2), 0.35);
-}
-
-#[test]
 fn test_add() {
     let vec_1: Vec3 = Vec3::new(0.2, 0.4, 0.7);
     let vec_2: Vec3 = Vec3::new(0.1, 0.3, 0.3);
@@ -107,4 +142,49 @@ fn test_sub() {
     let vec_2: Vec3 = Vec3::new(0.1, 0.2, 0.4);
     let vec_test: Vec3 = Vec3::new(0.1, 0.2, 0.4);
     assert_eq!(vec_1-vec_2, vec_test);
+}
+
+#[test]
+fn test_mul() {
+    let vec: Vec3 = Vec3::new(0.2, 0.4, 0.8);
+    let vec_test: Vec3 = Vec3::new(0.4, 0.8, 1.6);
+    assert_eq!(vec*2.0, vec_test);
+    assert_eq!(2.0*vec, vec_test);
+}
+
+#[test]
+fn test_div() {
+    let vec: Vec3 = Vec3::new(0.2, 0.4, 0.8);
+    let vec_test: Vec3 = Vec3::new(0.1, 0.2, 0.4);
+    let vec_inf: Vec3 = Vec3::new(f64::MAX, f64::MAX, f64::MAX);
+    assert_eq!(vec/2.0, vec_test);
+    assert_eq!(vec/0.0, vec_inf);
+}
+
+#[test]
+fn test_len() {
+    let vec: Vec3 = Vec3::new(0.0, 3.0, 4.0);
+    assert_eq!(vec.length(), 5.0);
+}
+
+#[test]
+fn test_unit() {
+    let vec: Vec3 = Vec3::new(0.0, 3.0, 4.0);
+    let unit_vec: Vec3 = Vec3::new(0.0, 3.0/5.0, 4.0/5.0);
+    assert_eq!(vec.unit_vector(), unit_vec);
+}
+
+#[test]
+fn test_dot() {
+    let vec_1: Vec3 = Vec3::new(0.2, 0.4, 0.7);
+    let vec_2: Vec3 = Vec3::new(0.1, 0.3, 0.3);
+    assert_eq!(vec_1.dot(&vec_2), 0.35);
+}
+
+#[test]
+fn test_cross() {
+    let vec_1: Vec3 = Vec3::new(3.0, -3.0, 1.0);
+    let vec_2: Vec3 = Vec3::new(4.0, 9.0, 2.0);
+    let vec_cross: Vec3 = Vec3::new(-15.0, -2.0, 39.0);
+    assert_eq!(vec_1.cross(&vec_2), vec_cross);
 }
