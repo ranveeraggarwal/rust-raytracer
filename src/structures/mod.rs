@@ -1,2 +1,3 @@
 #![allow(dead_code)]
-mod vec3;
+pub mod vec3;
+pub mod ray;
