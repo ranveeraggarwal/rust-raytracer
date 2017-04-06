@@ -1,24 +1,24 @@
 use structures::vec3::Vec3;
 
-struct Ray {
+pub struct Ray {
     a: Vec3,
     b: Vec3,
 }
 
 impl Ray {
-    fn new(a: Vec3, b: Vec3) -> Ray {
+    pub fn new(a: Vec3, b: Vec3) -> Ray {
         Ray {a: a, b: b}
     }
 
-    fn origin(&self) -> Vec3 {
+    pub fn origin(&self) -> Vec3 {
         self.a
     }
 
-    fn direction(&self) -> Vec3 {
+    pub fn direction(&self) -> Vec3 {
         self.b
     }
 
-    fn point_at_parameter(&self, t: f64) -> Vec3 {
+    pub fn point_at_parameter(&self, t: f64) -> Vec3 {
         self.a + t * self.b 
     }
 }
