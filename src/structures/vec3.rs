@@ -54,6 +54,12 @@ impl PartialEq for Vec3 {
     }
 }
 
+impl Vec3 {
+    fn dot(&self, other: &Vec3) -> f64 {
+        (self.x() * other.x()) + (self.y() * other.y()) + (self.z() * other.z())
+    }
+}
+
 #[test]
 fn test_xyz() {
     let vec: Vec3 = Vec3::new(1.2, 3.4, 6.7);
@@ -68,6 +74,13 @@ fn test_rgb() {
     assert_eq!(vec.r(), 0.2);
     assert_eq!(vec.g(), 0.4);
     assert_eq!(vec.b(), 0.7347845);
+}
+
+#[test]
+fn test_dot() {
+    let vec_1: Vec3 = Vec3::new(0.2, 0.4, 0.7);
+    let vec_2: Vec3 = Vec3::new(0.1, 0.3, 0.3);
+    assert_eq!(vec_1.dot(&vec_2), 0.35);
 }
 
 #[test]
