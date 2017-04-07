@@ -12,11 +12,12 @@ pub fn gen_lerp(origin: Vec3, lower_left_corner: Vec3,
             let v: f64 = y as f64/ny as f64;
             let r: Ray = Ray::new(origin, lower_left_corner + u*horizontal + v*vertical);
             let col: Vec3 = lerp(&r);
-            row.push(255.99*col);
+            let color_vector = Vec3::new((255.99*col.r()).floor(), (255.99*col.g()).floor(), (255.99*col.b()).floor());
+            row.push(color_vector);
         }
         bg.push(row);
     }
-    bg
+    return bg;
 }
 
 fn lerp(r: &Ray) -> Vec3 {
@@ -32,5 +33,5 @@ fn test_lerp () {
                                        Vec3{elements:[4.0, 0.0, 0.0]},
                                        Vec3{elements:[0.0, 2.0, 0.0]},
                                        10, 5);
-    assert_eq!(vec[0][0], Vec3 { elements: [175.4068741301571, 207.64012447809426, 255.99] });
+    assert_eq!(vec[0][0], Vec3 { elements: [175.0, 207.0, 255.0] });
 }
