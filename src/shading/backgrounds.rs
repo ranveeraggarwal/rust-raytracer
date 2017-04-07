@@ -10,9 +10,12 @@ pub fn gen_lerp(origin: Vec3, lower_left_corner: Vec3,
         for x in 0..nx {
             let u: f64 = x as f64/nx as f64;
             let v: f64 = y as f64/ny as f64;
-            let r: Ray = Ray::new(origin, lower_left_corner + u*horizontal + v*vertical);
+            let r: Ray = Ray::new(origin,
+                                  lower_left_corner + u*horizontal + v*vertical);
             let col: Vec3 = lerp(&r);
-            let color_vector = Vec3::new((255.99*col.r()).floor(), (255.99*col.g()).floor(), (255.99*col.b()).floor());
+            let color_vector = Vec3::new((255.99*col.r()).floor(),
+                                         (255.99*col.g()).floor(),
+                                         (255.99*col.b()).floor());
             row.push(color_vector);
         }
         bg.push(row);

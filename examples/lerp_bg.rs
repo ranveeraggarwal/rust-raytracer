@@ -14,6 +14,6 @@ fn main() {
                                              horizontal,
                                              vertical,
                                              200, 100);
-    let filename = "test.ppm".to_string();
+    let filename = "outputs/lerp_bg.ppm".to_string();
     gen_ppm(color_vec, filename);
 }

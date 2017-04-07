@@ -7,14 +7,22 @@ use std::io::prelude::*;
 use std::fs::File;
 use std::path::Path;
 
-pub fn gen_ppm (image: Vec<Vec<Vec3>>, filename: String) -> () {
-    let mut content = format!("P3\n{} {}\n255\n", image[0].len(), image.len());
-    for i in image {
-        for j in i {
-            content = format!("{}{} {} {}\n", content, j.r().to_string(), j.g().to_string(), j.b().to_string());
+pub fn gen_ppm (image: Vec<Vec<Vec3>>,
+                filename: String) -> () {
+    let mut content = format!("P3\n{} {}\n255\n",
+                              image[0].len(),
+                              image.len());
+    for row in image {
+        for pixel in row {
+            content = format!("{}{} {} {}\n",
+                              content,
+                              pixel.r().to_string(),
+                              pixel.g().to_string(),
+                              pixel.b().to_string());
         }
     }
 
+    // Time to write to image file!
     let path = Path::new(&filename);
     let display = path.display();
 
@@ -28,11 +36,11 @@ pub fn gen_ppm (image: Vec<Vec<Vec3>>, filename: String) -> () {
 
     // Write the content string to `file`, returns `io::Result<()>`
     match file.write_all(content.as_bytes()) {
-        Err(why) => {
-            panic!("couldn't write to {}: {}", display,
-                   why.description())
-        },
-        Ok(_) => println!("successfully wrote to {}", display),
+        Err(why) => panic!("couldn't write to {}: {}",
+                           display,
+                           why.description()),
+        Ok(_) => println!("successfully wrote to {}",
+                          display),
     };
 }
 
