@@ -1,8 +1,8 @@
 RayTracer
 ===
 
-[![Build Status](https://travis-ci.org/ranveeraggarwal/tracer-rs.svg?branch=master)](https://travis-ci.org/ranveeraggarwal/tracer-rs)
-[![codecov](https://codecov.io/gh/ranveeraggarwal/tracer-rs/branch/master/graph/badge.svg)](https://codecov.io/gh/ranveeraggarwal/tracer-rs)
+[![Build Status](https://travis-ci.org/ranveeraggarwal/rust-raytracer.svg?branch=master)](https://travis-ci.org/ranveeraggarwal/rust-raytracer)
+[![codecov](https://codecov.io/gh/ranveeraggarwal/rust-raytracer/branch/master/graph/badge.svg)](https://codecov.io/gh/ranveeraggarwal/rust-raytracer)
 
 
 A ray tracer in rust. 
