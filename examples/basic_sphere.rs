@@ -6,21 +6,25 @@ use raytracer::structures::vec3::Vec3;
 use raytracer::structures::ray::Ray;
 
 use raytracer::objects::sphere::Sphere;
+use raytracer::objects::{Hittable, HittableList, HitRecord};
 
 use raytracer::io::write::gen_ppm;
 
 fn main() {
     let filename = "outputs/basic_sphere.ppm".to_string();
-    
-    let lower_left_corner: Vec3 = Vec3::new(-2.0, -1.0, -1.0);
+
     let horizontal: Vec3 = Vec3::new(4.0, 0.0, 0.0);
+    let lower_left_corner: Vec3 = Vec3::new(-2.0, -1.0, -1.0);
     let vertical: Vec3 = Vec3::new(0.0, 2.0, 0.0);
     let origin: Vec3 = Vec3::new(0.0, 0.0, 0.0);
     let nx: u64 = 200;
     let ny: u64 = 100;
 
-    let sphere_center: Vec3 = Vec3::new(0.0, 0.0, -1.0);
-    let sphere: Sphere = Sphere::new(sphere_center, 0.5);
+    let sphere1_center: Vec3 = Vec3::new(0.0, 0.0, -1.0);
+    let sphere_1: Sphere = Sphere::new(sphere1_center, 0.5);
+
+    let mut world: HittableList = HittableList::new();
+    world.add_sphere(sphere_1);
 
     let mut scene: Vec<Vec<Vec3>> = Vec::new();
 
@@ -32,10 +36,11 @@ fn main() {
             let r: Ray = Ray::new(origin,
                                   lower_left_corner + u*horizontal + v*vertical);
             let mut color_vector: Vec3 = Vec3::new(0.0, 0.0, 0.0);
-            let poi: Vec3 = sphere.intersect(&r);
-            if poi != Vec3::new(f64::MAX, f64::MAX, f64::MAX) {
-                let normal: Vec3 = (poi - sphere_center).unit_vector();
-                color_vector = 255.99 * 0.5 * Vec3::new(normal.x() + 1.0, normal.y() + 1.0, normal.z() + 1.0);
+            let mut rec: HitRecord = HitRecord::new();
+            if world.intersect(&r, 0.0, f64::MAX, &mut rec) {
+                color_vector = 255.99 * 0.5 * Vec3::new(rec.normal().x() + 1.0,
+                                                        rec.normal().y() + 1.0,
+                                                        rec.normal().z() + 1.0);
                 color_vector.colorize();
             }
             row.push(color_vector);

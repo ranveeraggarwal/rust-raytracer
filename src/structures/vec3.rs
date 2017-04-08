@@ -117,6 +117,8 @@ impl Vec3 {
             self.x() * other.y() - self.y() * other.x()]}
     }
 
+    /// Converts floats to ints, colors are
+    /// supposed to be integer values between 0 and 255.
     pub fn colorize(&mut self) -> () {
         self.elements[0] = self.elements[0].floor();
         self.elements[1] = self.elements[1].floor();
