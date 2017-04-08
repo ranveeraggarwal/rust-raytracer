@@ -23,8 +23,12 @@ fn main() {
     let sphere1_center: Vec3 = Vec3::new(0.0, 0.0, -1.0);
     let sphere_1: Sphere = Sphere::new(sphere1_center, 0.5);
 
+    let sphere2_center: Vec3 = Vec3::new(0.0, -100.5, -1.0);
+    let sphere_2: Sphere = Sphere::new(sphere2_center, 100.0);
+
     let mut world: HittableList = HittableList::new();
     world.add_sphere(sphere_1);
+    world.add_sphere(sphere_2);
 
     let mut scene: Vec<Vec<Vec3>> = Vec::new();
 

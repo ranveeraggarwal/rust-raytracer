@@ -5,7 +5,6 @@ pub trait Hittable {
     fn intersect(&self, ray: &Ray, t_min: f64, t_max: f64, rec: &mut HitRecord) -> bool;
 }
 
-#[derive(Clone, Copy)]
 pub struct HitRecord {
     t: f64,
     p: Vec3,
@@ -18,7 +17,7 @@ impl HitRecord {
     }
 
     pub fn normal(&self) -> Vec3 {
-        self.normal()
+        self.normal
     }
 }
 
