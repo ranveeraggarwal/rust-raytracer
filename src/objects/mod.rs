@@ -3,6 +3,11 @@ use structures::vec3::Vec3;
 
 use std::f64;
 
+use self::sphere::Sphere;
+
+pub mod sphere;
+pub mod camera;
+
 pub trait Hittable {
     fn intersect(&self, ray: &Ray, t_min: f64, t_max: f64, rec: &mut HitRecord) -> bool;
 }
@@ -22,10 +27,6 @@ impl HitRecord {
         self.normal
     }
 }
-
-pub mod sphere;
-
-use self::sphere::Sphere;
 
 pub struct HittableList {
     spheres: Vec<Sphere>,
