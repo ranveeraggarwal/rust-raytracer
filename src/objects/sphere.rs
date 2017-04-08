@@ -1,5 +1,6 @@
 use structures::vec3::Vec3;
 use structures::ray::Ray;
+use std::f64;
 
 pub struct Sphere {
     center: Vec3,
@@ -19,13 +20,17 @@ impl Sphere {
         self.radius
     }
 
-    pub fn intersects(&self, ray: &Ray) -> bool {
+    pub fn intersect(&self, ray: &Ray) -> Vec3 {
         let oc: Vec3 = ray.origin() - self.center();
         let a: f64 = ray.direction().dot(&ray.direction());
         let b: f64 = 2.0 * oc.dot(&ray.direction());
         let c: f64 = oc.dot(&oc) - self.radius * self.radius;
         let discriminant: f64 = b * b - 4.0 * a * c;
-        discriminant > 0.0
+        if discriminant < 0.0 {
+            return Vec3::new(f64::MAX, f64::MAX, f64::MAX);
+        } else {
+            return ray.point_at_parameter((0.0 - b - discriminant.sqrt()) / (2.0 * a));
+        }
     }
 }
 
@@ -35,5 +40,5 @@ fn test_intersect() {
     let sphere: Sphere = Sphere::new(sphere_center, 0.5);
     let origin: Vec3 = Vec3::new(0.0, 0.0, 0.0);
     let ray: Ray = Ray::new(origin, sphere_center);
-    assert!(sphere.intersects(&ray));
+    assert_eq!(sphere.intersect(&ray), Vec3{elements: [0.0, 0.0, -0.5]});
 }

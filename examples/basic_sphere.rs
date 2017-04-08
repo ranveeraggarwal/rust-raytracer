@@ -1,5 +1,7 @@
 extern crate raytracer;
 
+use std::f64;
+
 use raytracer::structures::vec3::Vec3;
 use raytracer::structures::ray::Ray;
 
@@ -30,8 +32,11 @@ fn main() {
             let r: Ray = Ray::new(origin,
                                   lower_left_corner + u*horizontal + v*vertical);
             let mut color_vector: Vec3 = Vec3::new(0.0, 0.0, 0.0);
-            if sphere.intersects(&r) {
-                color_vector = Vec3::new(0.0, 0.0, 255.0);
+            let poi: Vec3 = sphere.intersect(&r);
+            if poi != Vec3::new(f64::MAX, f64::MAX, f64::MAX) {
+                let normal: Vec3 = (poi - sphere_center).unit_vector();
+                color_vector = 255.99 * 0.5 * Vec3::new(normal.x() + 1.0, normal.y() + 1.0, normal.z() + 1.0);
+                color_vector.colorize();
             }
             row.push(color_vector);
         }

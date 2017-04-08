@@ -116,6 +116,12 @@ impl Vec3 {
             self.z() * other.x() - self.x() * other.z(),
             self.x() * other.y() - self.y() * other.x()]}
     }
+
+    pub fn colorize(&mut self) -> () {
+        self.elements[0] = self.elements[0].floor();
+        self.elements[1] = self.elements[1].floor();
+        self.elements[2] = self.elements[2].floor();
+    }
 }
 
 #[test]
@@ -199,4 +205,11 @@ fn test_cross() {
     let vec_2: Vec3 = Vec3::new(4.0, 9.0, 2.0);
     let vec_cross: Vec3 = Vec3::new(-15.0, -2.0, 39.0);
     assert_eq!(vec_1.cross(&vec_2), vec_cross);
+}
+
+#[test]
+fn test_colorize() {
+    let mut vec: Vec3 = Vec3::new(3.23, 3.1, 1.0);
+    vec.colorize();
+    assert_eq!(vec, Vec3::new(3.0, 3.0, 1.0));
 }
