@@ -1,6 +1,6 @@
 use structures::vec3::Vec3;
 #[cfg(test)]
-use shading::backgrounds::gen_lerp;
+use structures::ray::Ray;
 
 use std::error::Error;
 use std::io::prelude::*;
@@ -46,13 +46,38 @@ pub fn gen_ppm (image: Vec<Vec<Vec3>>,
 
 #[test]
 fn test_gen_ppm() {
-    let color_vec: Vec<Vec<Vec3>> = gen_lerp(Vec3{elements:[0.0, 0.0, 0.0]},
-                                             Vec3{elements:[-2.0, -1.0, -1.0]},
-                                             Vec3{elements:[4.0, 0.0, 0.0]},
-                                             Vec3{elements:[0.0, 2.0, 0.0]},
-                                             200, 100);
+    fn lerp(r: &Ray) -> Vec3 {
+       let unit_direction: Vec3 = r.direction().unit_vector();
+        let t: f64 = 0.5*(unit_direction.y() + 1.0);
+        (1.0 - t) * Vec3{elements:[1.0, 1.0, 1.0]} + t * Vec3{elements:[0.5, 0.7, 1.0]}
+    }
+
+    let origin: Vec3 = Vec3::new(0.0, 0.0, 0.0);
+    let lower_left_corner: Vec3 = Vec3::new(-2.0, -1.0, -1.0);
+    let horizontal: Vec3 = Vec3::new(4.0, 0.0, 0.0);
+    let vertical: Vec3 = Vec3::new(0.0, 2.0, 0.0);
+    let nx: u64 = 200;
+    let ny: u64 = 100;
+
+    let mut bg: Vec<Vec<Vec3>> = Vec::new();
+    for y in (0..ny).rev() {
+        let mut row: Vec<Vec3> = Vec::new();
+        for x in 0..nx {
+            let u: f64 = x as f64/nx as f64;
+            let v: f64 = y as f64/ny as f64;
+            let r: Ray = Ray::new(origin,
+                                  lower_left_corner + u*horizontal + v*vertical);
+            let col: Vec3 = lerp(&r);
+            let color_vector = Vec3::new((255.99*col.r()).floor(),
+                                         (255.99*col.g()).floor(),
+                                         (255.99*col.b()).floor());
+            row.push(color_vector);
+        }
+        bg.push(row);
+    }
+
     let filename = "test.ppm".to_string();
-    gen_ppm(color_vec, filename);
+    gen_ppm(bg, filename);
     assert!(true);
 
 }
