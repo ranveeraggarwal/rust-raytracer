@@ -14,16 +14,23 @@ use raytracer::io::write::gen_ppm;
 
 use rand::Rng;
 
-fn color (r: &Ray, world: &Hittable) -> Vec3 {
+fn point_in_unit_sphere() -> Vec3 {
+    // Initialising p with a value outside the unit sphere
+    let mut p: Vec3 = Vec3::new(2.0, 2.0, 2.0);
+    let mut rng = rand::thread_rng();
+    while p.dot(&p) >= 1.0 {
+        p = 2.0 * Vec3::new(rng.gen::<f64>(), rng.gen::<f64>(), rng.gen::<f64>()) - Vec3::new(1.0, 1.0, 1.0);
+    }
+    p
+}
+
+fn color (r: &Ray, world: &Hittable, depth: u64) -> Vec3 {
     let mut rec: HitRecord = HitRecord::new();
-    if world.intersect(&r, 0.0, f64::MAX, &mut rec) {
-        let mut color_vector = 255.99 * 0.5 * Vec3::new(rec.normal().x() + 1.0,
-                                                    rec.normal().y() + 1.0,
-                                                    rec.normal().z() + 1.0);
-        color_vector.colorize();
-        return color_vector;
+    if world.intersect(&r, 0.0, f64::MAX, &mut rec) && depth > 0 {
+        let target: Vec3 = rec.p() + rec.normal() + point_in_unit_sphere();
+        return 0.5 * color(&Ray::new(rec.p(), target - rec.p()), world, depth-1);
     } else {
-        return Vec3::new(0.0, 0.0, 0.0);
+        return Vec3::new(0.5, 0.5, 0.5);
     }
 }
 
@@ -62,9 +69,9 @@ fn main() {
                 let u: f64 = (x as f64 + rng.gen::<f64>()) / nx as f64;
                 let v: f64 = (y as f64 + rng.gen::<f64>()) / ny as f64;
                 let r: Ray = cam.get_ray(u, v);
-                color_vector = color_vector + color(&r, &world);
+                color_vector = color_vector + color(&r, &world, 3);
             }
-            color_vector = color_vector/ns as f64;
+            color_vector = 255.99*color_vector/ns as f64;
             color_vector.colorize();
             row.push(color_vector);
         }
