@@ -7,6 +7,10 @@ RayTracer
 
 A ray tracer in rust. 
 
+## Status
+
+![Spheres](outputs/basic_sphere.jpg "Spheres")
+
 ## Current Goal
 
 Get Whitted ray tracing to work.
