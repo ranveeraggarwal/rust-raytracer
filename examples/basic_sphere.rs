@@ -71,7 +71,8 @@ fn main() {
                 let r: Ray = cam.get_ray(u, v);
                 color_vector = color_vector + color(&r, &world, 3);
             }
-            color_vector = 255.99*color_vector/ns as f64;
+            color_vector = color_vector/ns as f64;
+            color_vector = 255.99*Vec3::new(color_vector.r().sqrt(), color_vector.g().sqrt(), color_vector.b().sqrt());
             color_vector.colorize();
             row.push(color_vector);
         }
