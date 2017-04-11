@@ -3,11 +3,10 @@ use structures::vec3::Vec3;
 use objects::HitRecord;
 
 pub mod lambertian;
-use self::lambertian::Lambertian;
+pub mod metal;
 
-pub enum Material {
-    Lambertian,
-}
+use self::lambertian::Lambertian;
+use self::metal::Metal;
 
 pub trait Scatterable {
     fn scatter(&self, ray_in: &Ray, rec: &HitRecord, attenuation: &mut Vec3, scattered: &mut Ray) -> bool;
