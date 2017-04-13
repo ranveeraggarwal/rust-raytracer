@@ -27,3 +27,11 @@ impl Scatterable for Metal {
 fn reflect(v: &Vec3, n: &Vec3) -> Vec3 {
     *v - 2.0 * v.dot(n) * *n
 }
+
+#[test]
+fn test_reflect() {
+    let v: Vec3 = Vec3::new(1.0, 2.0, 4.0);
+    let n: Vec3 = Vec3::new(0.0, 0.0, 0.0);
+
+    assert_eq!(reflect(&v, &n), v);
+}

@@ -37,27 +37,37 @@ fn color (r: &Ray, world: &Hittable, depth: u64) -> Vec3 {
 fn main() {
     let filename = "outputs/basic_sphere.ppm".to_string();
 
-    let horizontal: Vec3 = Vec3::new(4.0, 0.0, 0.0);
-    let lower_left_corner: Vec3 = Vec3::new(-2.0, -1.0, -1.0);
-    let vertical: Vec3 = Vec3::new(0.0, 2.0, 0.0);
+    let horizontal: Vec3 = Vec3::new(6.0, 0.0, 0.0);
+    let lower_left_corner: Vec3 = Vec3::new(-3.0, -1.5, -1.0);
+    let vertical: Vec3 = Vec3::new(0.0, 3.0, 0.0);
     let origin: Vec3 = Vec3::new(0.0, 0.0, 0.0);
-    let nx: u64 = 200;
-    let ny: u64 = 100;
+    let nx: u64 = 300;
+    let ny: u64 = 150;
     let ns: u64 = 100;
 
     let cam: Camera = Camera::new(lower_left_corner, horizontal, vertical, origin);
 
-    let lambert_1: Lambertian = Lambertian::new(Vec3::new(0.8, 0.5, 0.2));
+    let lambert_1: Lambertian = Lambertian::new(Vec3::new(0.8, 0.3, 0.3));
     let sphere1_center: Vec3 = Vec3::new(0.0, 0.0, -1.0);
     let sphere_1: Sphere = Sphere::new(sphere1_center, 0.5, Material::Lambertian(lambert_1));
 
-    let lambert_2: Lambertian = Lambertian::new(Vec3::new(0.1, 0.3, 0.0));
+    let lambert_2: Lambertian = Lambertian::new(Vec3::new(0.8, 0.8, 0.0));
     let sphere2_center: Vec3 = Vec3::new(0.0, -100.5, -1.0);
     let sphere_2: Sphere = Sphere::new(sphere2_center, 100.0, Material::Lambertian(lambert_2));
+
+    let metal_1: Metal = Metal::new(Vec3::new(1.0, 1.0, 1.0));
+    let sphere3_center: Vec3 = Vec3::new(1.0, -0.25, -1.0);
+    let sphere_3: Sphere = Sphere::new(sphere3_center, 0.25, Material::Metal(metal_1));
+
+    let metal_2: Metal = Metal::new(Vec3::new(1.0, 1.0, 1.0));
+    let sphere4_center: Vec3 = Vec3::new(-1.0, -0.25, -1.0);
+    let sphere_4: Sphere = Sphere::new(sphere4_center, 0.25, Material::Metal(metal_2));
 
     let mut world: HittableList = HittableList::new();
     world.add_sphere(sphere_1);
     world.add_sphere(sphere_2);
+    world.add_sphere(sphere_3);
+    world.add_sphere(sphere_4);
 
     let mut scene: Vec<Vec<Vec3>> = Vec::new();
 

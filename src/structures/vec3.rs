@@ -177,9 +177,10 @@ fn test_sub() {
 #[test]
 fn test_mul() {
     let vec: Vec3 = Vec3::new(0.2, 0.4, 0.8);
-    let vec_test: Vec3 = Vec3::new(0.4, 0.8, 1.6);
-    assert_eq!(vec*2.0, vec_test);
-    assert_eq!(2.0*vec, vec_test);
+    let vec_mul: Vec3 = Vec3::new(2.0, 1.0, 1.0);
+    assert_eq!(vec*2.0, Vec3::new(0.4, 0.8, 1.6));
+    assert_eq!(2.0*vec, Vec3::new(0.4, 0.8, 1.6));
+    assert_eq!(vec*vec_mul, Vec3::new(0.4, 0.4, 0.8));
 }
 
 #[test]
