@@ -22,7 +22,6 @@ impl Scatterable for Lambertian {
         let target: Vec3 = rec.p() + rec.normal() + point_in_unit_sphere();
         *scattered = Ray::new(rec.p(), target - rec.p());
         *attenuation = self.albedo;
-        // println!("{:?}", self.albedo);
         true
     }
 }
@@ -35,4 +34,10 @@ fn point_in_unit_sphere() -> Vec3 {
         p = 2.0 * Vec3::new(rng.gen::<f64>(), rng.gen::<f64>(), rng.gen::<f64>()) - Vec3::new(1.0, 1.0, 1.0);
     }
     p
+}
+
+#[test]
+fn test_point() {
+    let vec: Vec3 = point_in_unit_sphere();
+    assert_eq!(vec.dot(&Vec3::new(0.0, 0.0, 0.0)), 0.0);
 }

@@ -2,6 +2,7 @@ use structures::vec3::Vec3;
 use structures::ray::Ray;
 
 use materials::Material;
+#[cfg(test)]
 use materials::lambertian::Lambertian;
 
 use super::Hittable;
