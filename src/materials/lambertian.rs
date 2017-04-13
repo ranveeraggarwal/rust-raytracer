@@ -6,6 +6,7 @@ use super::Scatterable;
 
 use super::super::rand::Rng;
 
+#[derive(Clone, Copy, Debug)]
 pub struct Lambertian {
     albedo: Vec3,
 }
@@ -21,6 +22,7 @@ impl Scatterable for Lambertian {
         let target: Vec3 = rec.p() + rec.normal() + point_in_unit_sphere();
         *scattered = Ray::new(rec.p(), target - rec.p());
         *attenuation = self.albedo;
+        // println!("{:?}", self.albedo);
         true
     }
 }

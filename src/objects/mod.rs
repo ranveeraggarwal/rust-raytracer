@@ -1,6 +1,9 @@
 use structures::ray::Ray;
 use structures::vec3::Vec3;
 
+use materials::Material;
+use materials::lambertian::Lambertian;
+
 use std::f64;
 
 use self::sphere::Sphere;
@@ -16,11 +19,15 @@ pub struct HitRecord {
     t: f64,
     p: Vec3,
     normal: Vec3,
+    material: Material,
 }
 
 impl HitRecord {
     pub fn new() -> HitRecord {
-        HitRecord{t: 0.0, p: Vec3::new(0.0, 0.0, 0.0), normal: Vec3::new(0.0, 0.0, 0.0)}
+        HitRecord{t: 0.0, 
+            p: Vec3::new(0.0, 0.0, 0.0), 
+            normal: Vec3::new(0.0, 0.0, 0.0), 
+            material: Material::Lambertian(Lambertian::new(Vec3::new(0.0, 0.0, 0.0)))}
     }
 
     pub fn normal(&self) -> Vec3 {
@@ -29,6 +36,10 @@ impl HitRecord {
 
     pub fn p(&self) -> Vec3 {
         self.p
+    }
+
+    pub fn material(&self) -> Material {
+        self.material
     }
 }
 
@@ -63,6 +74,7 @@ impl Hittable for HittableList {
                 rec.p = temp_rec.p;
                 rec.t = temp_rec.t;
                 rec.normal = temp_rec.normal;
+                rec.material = temp_rec.material;
             }
         }
         hit_anything
@@ -84,8 +96,9 @@ fn test_hittable() {
     let nx: u64 = 20;
     let ny: u64 = 10;
 
+    let lambert: Lambertian = Lambertian::new(Vec3::new(0.0, 0.0, 0.0));
     let sphere1_center: Vec3 = Vec3::new(0.0, 0.0, -1.0);
-    let sphere_1: Sphere = Sphere::new(sphere1_center, 0.5);
+    let sphere_1: Sphere = Sphere::new(sphere1_center, 0.5, Material::Lambertian(lambert));
 
     let mut world: HittableList = HittableList::new();
     world.add_sphere(sphere_1);

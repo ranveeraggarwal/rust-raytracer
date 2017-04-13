@@ -1,6 +1,9 @@
 use structures::vec3::Vec3;
 use structures::ray::Ray;
 
+use materials::Material;
+use materials::lambertian::Lambertian;
+
 use super::Hittable;
 use super::HitRecord;
 
@@ -9,11 +12,12 @@ use std::f64;
 pub struct Sphere {
     center: Vec3,
     radius: f64,
+    material: Material,
 }
 
 impl Sphere {
-    pub fn new(center: Vec3, radius: f64) -> Sphere {
-        Sphere {center: center, radius: radius}
+    pub fn new(center: Vec3, radius: f64, material: Material) -> Sphere {
+        Sphere {center: center, radius: radius, material: material}
     }
 
     pub fn center(&self) -> Vec3 {
@@ -39,6 +43,7 @@ impl Hittable for Sphere {
                 rec.p = ray.point_at_parameter(t);
                 // The length p - c would be the radius
                 rec.normal = (rec.p - self.center())/self.radius();
+                rec.material = self.material;
                 return true;
             }
             let t: f64 = (0.0 - b + discriminant.sqrt()) / (2.0 * a);
@@ -47,6 +52,7 @@ impl Hittable for Sphere {
                 rec.p = ray.point_at_parameter(t);
                 // The length p - c would be the radius
                 rec.normal = (rec.p - self.center())/self.radius();
+                rec.material = self.material;
                 return true;
             }
         }
@@ -57,7 +63,8 @@ impl Hittable for Sphere {
 #[test]
 fn test_intersect() {
     let sphere_center: Vec3 = Vec3::new(0.0, 0.0, -1.0);
-    let sphere: Sphere = Sphere::new(sphere_center, 0.5);
+    let lambert: Lambertian = Lambertian::new(Vec3::new(0.0, 0.0, 0.0));
+    let sphere: Sphere = Sphere::new(sphere_center, 0.5, Material::Lambertian(lambert));
     let origin: Vec3 = Vec3::new(0.0, 0.0, 0.0);
     let ray: Ray = Ray::new(origin, sphere_center);
     let mut rec: HitRecord = HitRecord::new();

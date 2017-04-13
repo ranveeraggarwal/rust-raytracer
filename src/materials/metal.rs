@@ -4,6 +4,7 @@ use objects::HitRecord;
 
 use super::Scatterable;
 
+#[derive(Clone, Copy, Debug)]
 pub struct Metal {
     albedo: Vec3,
 }
