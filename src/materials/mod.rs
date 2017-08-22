@@ -4,14 +4,17 @@ use objects::HitRecord;
 
 pub mod lambertian;
 pub mod metal;
+pub mod dielectric;
 
 use self::lambertian::Lambertian;
 use self::metal::Metal;
+use self::dielectric::Dielectric;
 
 #[derive(Clone, Copy, Debug)]
 pub enum Material {
 	Lambertian(Lambertian),
 	Metal(Metal),
+	Dielectric(Dielectric),
 }
 
 impl Scatterable for Material {
@@ -19,6 +22,7 @@ impl Scatterable for Material {
 		match *self {
 			Material::Lambertian(ref inner) => inner.scatter(ray_in, rec, attenuation, scattered),
 			Material::Metal(ref inner) => inner.scatter(ray_in, rec, attenuation, scattered),
+			Material::Dielectric(ref inner) => inner.scatter(ray_in, rec, attenuation, scattered),
 		}
 	}
 }
