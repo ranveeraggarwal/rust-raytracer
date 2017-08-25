@@ -10,6 +10,7 @@ use raytracer::materials::Material;
 use raytracer::materials::Scatterable;
 use raytracer::materials::lambertian::Lambertian;
 use raytracer::materials::metal::Metal;
+use raytracer::materials::dielectric::Dielectric;
 
 use raytracer::objects::sphere::Sphere;
 use raytracer::objects::camera::Camera;
@@ -30,7 +31,10 @@ fn color (r: &Ray, world: &Hittable, depth: u64) -> Vec3 {
             return Vec3::new(0.0, 0.0, 0.0);
         }
     } else {
-        return Vec3::new(0.5, 0.5, 0.5);
+        let unit_direction: Vec3 = r.direction().unit_vector();
+        let t: f64 = 0.5*(unit_direction.y() + 1.0);
+        return (1.0-t)*Vec3::new(1.0, 1.0, 1.0) + t*Vec3::new(0.5, 0.7, 1.0);
+        // return Vec3::new(0.5, 0.5, 0.5);
     }
 }
 
@@ -47,7 +51,7 @@ fn main() {
 
     let cam: Camera = Camera::new(lower_left_corner, horizontal, vertical, origin);
 
-    let lambert_1: Lambertian = Lambertian::new(Vec3::new(0.8, 0.3, 0.3));
+    let lambert_1: Lambertian = Lambertian::new(Vec3::new(0.1, 0.2, 0.5));
     let sphere1_center: Vec3 = Vec3::new(0.0, 0.0, -1.0);
     let sphere_1: Sphere = Sphere::new(sphere1_center, 0.5, Material::Lambertian(lambert_1));
 
@@ -55,13 +59,13 @@ fn main() {
     let sphere2_center: Vec3 = Vec3::new(0.0, -100.5, -1.0);
     let sphere_2: Sphere = Sphere::new(sphere2_center, 100.0, Material::Lambertian(lambert_2));
 
-    let metal_1: Metal = Metal::new(Vec3::new(1.0, 1.0, 1.0));
-    let sphere3_center: Vec3 = Vec3::new(1.0, -0.25, -1.0);
-    let sphere_3: Sphere = Sphere::new(sphere3_center, 0.25, Material::Metal(metal_1));
+    let metal_1: Metal = Metal::new(Vec3::new(0.8, 0.6, 0.2));
+    let sphere3_center: Vec3 = Vec3::new(1.0, -0.0, -1.0);
+    let sphere_3: Sphere = Sphere::new(sphere3_center, 0.5, Material::Metal(metal_1));
 
-    let metal_2: Metal = Metal::new(Vec3::new(1.0, 1.0, 1.0));
-    let sphere4_center: Vec3 = Vec3::new(-1.0, -0.25, -1.0);
-    let sphere_4: Sphere = Sphere::new(sphere4_center, 0.25, Material::Metal(metal_2));
+    let die_1: Dielectric = Dielectric::new(1.5);
+    let sphere4_center: Vec3 = Vec3::new(-1.0, 0.0, -1.0);
+    let sphere_4: Sphere = Sphere::new(sphere4_center, 0.5, Material::Dielectric(die_1));
 
     let mut world: HittableList = HittableList::new();
     world.add_sphere(sphere_1);

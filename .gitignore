@@ -2,3 +2,5 @@ target
 Cargo.lock
 *.ppm
 .idea/
+.DS_Store
+.vscode/
