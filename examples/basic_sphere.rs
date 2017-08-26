@@ -41,12 +41,12 @@ fn color (r: &Ray, world: &Hittable, depth: u64) -> Vec3 {
 fn main() {
     let filename = "outputs/basic_sphere.ppm".to_string();
 
-    let horizontal: Vec3 = Vec3::new(6.0, 0.0, 0.0);
-    let lower_left_corner: Vec3 = Vec3::new(-3.0, -1.5, -1.0);
-    let vertical: Vec3 = Vec3::new(0.0, 3.0, 0.0);
+    let horizontal: Vec3 = Vec3::new(4.0, 0.0, 0.0);
+    let lower_left_corner: Vec3 = Vec3::new(-2.0, -1.0, -1.0);
+    let vertical: Vec3 = Vec3::new(0.0, 2.0, 0.0);
     let origin: Vec3 = Vec3::new(0.0, 0.0, 0.0);
-    let nx: u64 = 300;
-    let ny: u64 = 150;
+    let nx: u64 = 200;
+    let ny: u64 = 100;
     let ns: u64 = 100;
 
     let cam: Camera = Camera::new(lower_left_corner, horizontal, vertical, origin);
@@ -65,7 +65,7 @@ fn main() {
 
     let die_1: Dielectric = Dielectric::new(1.5);
     let sphere4_center: Vec3 = Vec3::new(-1.0, 0.0, -1.0);
-    let sphere_4: Sphere = Sphere::new(sphere4_center, 0.5, Material::Dielectric(die_1));
+    let sphere_4: Sphere = Sphere::new(sphere4_center, -0.45, Material::Dielectric(die_1));
 
     let mut world: HittableList = HittableList::new();
     world.add_sphere(sphere_1);
