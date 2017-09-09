@@ -41,15 +41,12 @@ fn color (r: &Ray, world: &Hittable, depth: u64) -> Vec3 {
 fn main() {
     let filename = "outputs/basic_sphere.ppm".to_string();
 
-    let horizontal: Vec3 = Vec3::new(4.0, 0.0, 0.0);
-    let lower_left_corner: Vec3 = Vec3::new(-2.0, -1.0, -1.0);
-    let vertical: Vec3 = Vec3::new(0.0, 2.0, 0.0);
-    let origin: Vec3 = Vec3::new(0.0, 0.0, 0.0);
     let nx: u64 = 200;
     let ny: u64 = 100;
     let ns: u64 = 100;
 
-    let cam: Camera = Camera::new(lower_left_corner, horizontal, vertical, origin);
+    let cam: Camera = Camera::new(Vec3::new(3.0, 3.0, 2.0), Vec3::new(0.0, 0.0, -1.0), 
+    Vec3::new(0.0, 1.0, 0.0), 50.0, (nx as f64)/(ny as f64), 2.0, Vec3::new(3.0, 3.0, 3.0).length());
 
     let lambert_1: Lambertian = Lambertian::new(Vec3::new(0.1, 0.2, 0.5));
     let sphere1_center: Vec3 = Vec3::new(0.0, 0.0, -1.0);
