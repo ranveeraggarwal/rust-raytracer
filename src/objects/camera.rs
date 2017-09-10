@@ -65,13 +65,3 @@ impl Camera {
                  self.lower_left_corner + u*self.horizontal + v*self.vertical - self.origin - offset)
     }
 }
-
-#[test]
-fn test_ray() {
-    let horizontal: Vec3 = Vec3::new(4.0, 0.0, 0.0);
-    let lower_left_corner: Vec3 = Vec3::new(-2.0, -1.0, -1.0);
-    let vertical: Vec3 = Vec3::new(0.0, 2.0, 0.0);
-    let origin: Vec3 = Vec3::new(0.0, 0.0, 0.0);
-    let camera: Camera = Camera::new(lower_left_corner, horizontal, vertical, origin);
-    assert_eq!(camera.get_ray(0.0, 0.0), Ray::new(origin, lower_left_corner));
-}

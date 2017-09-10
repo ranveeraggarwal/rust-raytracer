@@ -26,7 +26,7 @@ impl Scatterable for Lambertian {
     }
 }
 
-fn point_in_unit_sphere() -> Vec3 {
+pub fn point_in_unit_sphere() -> Vec3 {
     // Initialising p with a value outside the unit sphere
     let mut p: Vec3 = Vec3::new(2.0, 2.0, 2.0);
     let mut rng = super::super::rand::thread_rng();

@@ -56,7 +56,7 @@ fn main() {
     let sphere2_center: Vec3 = Vec3::new(0.0, -100.5, -1.0);
     let sphere_2: Sphere = Sphere::new(sphere2_center, 100.0, Material::Lambertian(lambert_2));
 
-    let metal_1: Metal = Metal::new(Vec3::new(0.8, 0.6, 0.2));
+    let metal_1: Metal = Metal::new(Vec3::new(0.8, 0.6, 0.2), 1.0);
     let sphere3_center: Vec3 = Vec3::new(1.0, -0.0, -1.0);
     let sphere_3: Sphere = Sphere::new(sphere3_center, 0.5, Material::Metal(metal_1));
 
