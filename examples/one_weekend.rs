@@ -84,7 +84,7 @@ fn random_scene() -> HittableList {
 }
 
 fn main() {
-    let filename = "outputs/basic_sphere.ppm".to_string();
+    let filename = "outputs/one_weekend.ppm".to_string();
 
     let nx: u64 = 480;
     let ny: u64 = 320;
@@ -97,15 +97,13 @@ fn main() {
 
     let mut scene: Vec<Vec<Vec3>> = Vec::new();
 
-    let mut rng = rand::thread_rng();
-
     for y in (0..ny).rev() {
         let mut row: Vec<Vec3> = Vec::new();
         for x in 0..nx {
             let mut color_vector: Vec3 = Vec3::new(0.0, 0.0, 0.0);
             for s in 0..ns {
-                let u: f64 = (x as f64 + rng.gen::<f64>()) / nx as f64;
-                let v: f64 = (y as f64 + rng.gen::<f64>()) / ny as f64;
+                let u: f64 = (x as f64 + rand::random::<f64>()) / nx as f64;
+                let v: f64 = (y as f64 + rand::random::<f64>()) / ny as f64;
                 let r: Ray = cam.get_ray(u, v);
                 color_vector = color_vector + color(&r, &world, 10);
             }

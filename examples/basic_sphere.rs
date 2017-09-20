@@ -1,5 +1,6 @@
 extern crate raytracer;
 extern crate rand;
+extern crate rayon;
 
 use std::f64;
 
@@ -18,7 +19,7 @@ use raytracer::objects::{Hittable, HittableList, HitRecord};
 
 use raytracer::io::write::gen_ppm;
 
-use rand::Rng;
+use rayon::iter::{IntoParallelIterator, ParallelIterator};
 
 fn color (r: &Ray, world: &Hittable, depth: u64) -> Vec3 {
     let mut rec: HitRecord = HitRecord::new();
@@ -41,9 +42,9 @@ fn color (r: &Ray, world: &Hittable, depth: u64) -> Vec3 {
 fn main() {
     let filename = "outputs/basic_sphere.ppm".to_string();
 
-    let nx: u64 = 200;
-    let ny: u64 = 100;
-    let ns: u64 = 100;
+    let nx: u64 = 400;
+    let ny: u64 = 200;
+    let ns: u64 = 200;
 
     let cam: Camera = Camera::new(Vec3::new(3.0, 3.0, 2.0), Vec3::new(0.0, 0.0, -1.0), 
     Vec3::new(0.0, 1.0, 0.0), 50.0, (nx as f64)/(ny as f64), 2.0, Vec3::new(3.0, 3.0, 3.0).length());
@@ -70,26 +71,25 @@ fn main() {
     world.add_sphere(sphere_3);
     world.add_sphere(sphere_4);
 
-    let mut scene: Vec<Vec<Vec3>> = Vec::new();
+    let count = ny;
 
-    let mut rng = rand::thread_rng();
-
-    for y in (0..ny).rev() {
-        let mut row: Vec<Vec3> = Vec::new();
-        for x in 0..nx {
+    let scene: Vec<Vec<Vec3>> = (0..ny).into_par_iter().map(|y_rev| {
+        let y: f64 = ny as f64 - y_rev as f64 - 1.0;
+        let row: Vec<Vec3> = (0..nx).into_par_iter().map(|x| {
             let mut color_vector: Vec3 = Vec3::new(0.0, 0.0, 0.0);
             for s in 0..ns {
-                let u: f64 = (x as f64 + rng.gen::<f64>()) / nx as f64;
-                let v: f64 = (y as f64 + rng.gen::<f64>()) / ny as f64;
+                let u: f64 = (x as f64 + rand::random::<f64>()) / nx as f64;
+                let v: f64 = (y as f64 + rand::random::<f64>()) / ny as f64;
                 let r: Ray = cam.get_ray(u, v);
                 color_vector = color_vector + color(&r, &world, 10);
             }
             color_vector = color_vector/ns as f64;
             color_vector = 255.99*Vec3::new(color_vector.r().sqrt(), color_vector.g().sqrt(), color_vector.b().sqrt());
             color_vector.colorize();
-            row.push(color_vector);
-        }
-        scene.push(row);
-    }
+            color_vector
+        }).collect();
+        row
+    }).collect();
+
     gen_ppm(scene, filename);
 }
