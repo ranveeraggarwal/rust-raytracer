@@ -71,8 +71,6 @@ fn main() {
     world.add_sphere(sphere_3);
     world.add_sphere(sphere_4);
 
-    let count = ny;
-
     let scene: Vec<Vec<Vec3>> = (0..ny).into_par_iter().map(|y_rev| {
         let y: f64 = ny as f64 - y_rev as f64 - 1.0;
         let row: Vec<Vec3> = (0..nx).into_par_iter().map(|x| {
