@@ -9,28 +9,7 @@ use std::path::Path;
 
 use indicatif::{ProgressBar, ProgressStyle};
 
-pub fn gen_ppm (image: Vec<Vec<Vec3>>,
-                filename: String) -> () {
-    let mut content = format!("P3\n{} {}\n255\n",
-                              image[0].len(),
-                              image.len());
-
-
-    let bar = ProgressBar::new((image.len() * image[0].len()) as u64);
-    bar.set_style(ProgressStyle::default_bar().template("[{elapsed} elapsed] {wide_bar:.cyan/white} {percent}% [{eta} remaining]    [saving]"));
-
-    for row in image {
-        for pixel in row {
-            content = format!("{}{} {} {}\n",
-                              content,
-                              pixel.r().to_string(),
-                              pixel.g().to_string(),
-                              pixel.b().to_string());
-            bar.inc(1);
-        }
-    }
-
-    bar.finish();
+pub fn gen_ppm(image: Vec<Vec<Vec3>>, filename: String) -> () {
 
     // Time to write to image file!
     let path = Path::new(&filename);
@@ -38,26 +17,32 @@ pub fn gen_ppm (image: Vec<Vec<Vec3>>,
 
     // Open a file in write-only mode, returns `io::Result<File>`
     let mut file = match File::create(&path) {
-        Err(why) => panic!("couldn't create {}: {}",
-                           display,
-                           why.description()),
+        Err(why) => panic!("couldn't create {}: {}", display, why.description()),
         Ok(file) => file,
     };
 
-    // Write the content string to `file`, returns `io::Result<()>`
-    match file.write_all(content.as_bytes()) {
-        Err(why) => panic!("couldn't write to {}: {}",
-                           display,
-                           why.description()),
-        Ok(_) => println!("successfully wrote to {}",
-                          display),
-    };
+    write!(file, "P3\n{} {}\n255\n", image[0].len(), image.len()).expect("saving to file failed.");
+
+    let bar = ProgressBar::new((image.len() * image[0].len()) as u64);
+    bar.set_style(ProgressStyle::default_bar().template(
+        "[{elapsed} elapsed] {wide_bar:.cyan/white} {percent}% [{eta} remaining]    [saving]",
+    ));
+
+    for row in image {
+        for pixel in row {
+            write!(file, "{} {} {}\n", pixel.r(), pixel.g(), pixel.b()).expect("saving to file failed.");
+            bar.inc(1);
+        }
+    }
+
+    bar.finish();
+    println!("successfully wrote to {}", display);
 }
 
 #[test]
 fn test_gen_ppm() {
     fn lerp(r: &Ray) -> Vec3 {
-       let unit_direction: Vec3 = r.direction().unit_vector();
+        let unit_direction: Vec3 = r.direction().unit_vector();
         let t: f64 = 0.5*(unit_direction.y() + 1.0);
         (1.0 - t) * Vec3{elements:[1.0, 1.0, 1.0]} + t * Vec3{elements:[0.5, 0.7, 1.0]}
     }
