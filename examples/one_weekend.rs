@@ -100,7 +100,7 @@ fn main() {
 
     let world: HittableList = random_scene();
 
-    let bar = ProgressBar::new(nx*ny);
+    let bar = ProgressBar::new(ny);
     bar.set_style(ProgressStyle::default_bar().template("[{elapsed} elapsed] {wide_bar:.cyan/white} {percent}% [{eta} remaining] [rendering]"));
 
     let scene: Vec<Vec<Vec3>> = (0..ny).into_par_iter().map(|y_rev| {
@@ -116,9 +116,9 @@ fn main() {
             color_vector = color_vector/ns as f64;
             color_vector = 255.99*Vec3::new(color_vector.r().sqrt(), color_vector.g().sqrt(), color_vector.b().sqrt());
             color_vector.colorize();
-            bar.inc(1);
             color_vector
         }).collect();
+        bar.inc(1);
         row
     }).collect();
 

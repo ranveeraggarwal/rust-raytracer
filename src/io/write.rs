@@ -23,7 +23,7 @@ pub fn gen_ppm(image: Vec<Vec<Vec3>>, filename: String) -> () {
 
     write!(file, "P3\n{} {}\n255\n", image[0].len(), image.len()).expect("saving to file failed.");
 
-    let bar = ProgressBar::new((image.len() * image[0].len()) as u64);
+    let bar = ProgressBar::new((image.len()) as u64);
     bar.set_style(ProgressStyle::default_bar().template(
         "[{elapsed} elapsed] {wide_bar:.cyan/white} {percent}% [{eta} remaining]    [saving]",
     ));
@@ -31,8 +31,8 @@ pub fn gen_ppm(image: Vec<Vec<Vec3>>, filename: String) -> () {
     for row in image {
         for pixel in row {
             write!(file, "{} {} {}\n", pixel.r(), pixel.g(), pixel.b()).expect("saving to file failed.");
-            bar.inc(1);
         }
+        bar.inc(1);
     }
 
     bar.finish();
