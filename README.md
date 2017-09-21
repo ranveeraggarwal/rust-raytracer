@@ -18,6 +18,6 @@ Single-threaded implementation complete. 1200x800 image at 10 samples took nearl
 ## Status
 
 Currently, it has been run on 504 random spheres at 100 samples.    
-CPU: Imtel Xeon E5-1650 v2: 6 cores/12 threads.
+CPU: Intel Xeon E5-1650 v2: 6 cores/12 threads.
 
 ![One Weekend](outputs/one_weekend.jpg "One Weekend")
