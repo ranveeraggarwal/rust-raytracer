@@ -4,5 +4,6 @@ version = "0.1.0"
 authors = ["Ranveer Aggarwal <ranveerag2arwal@gmail.com>"]
 
 [dependencies]
+indicatif = "0.7.0"
 rand = "0.3"
 rayon = "0.8.2"

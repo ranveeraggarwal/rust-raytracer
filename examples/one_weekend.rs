@@ -1,6 +1,7 @@
 extern crate raytracer;
 extern crate rand;
 extern crate rayon;
+extern crate indicatif;
 
 use std::f64;
 
@@ -22,6 +23,8 @@ use raytracer::io::write::gen_ppm;
 use rand::Rng;
 
 use rayon::iter::{IntoParallelIterator, ParallelIterator};
+
+use indicatif::{ProgressBar, ProgressStyle};
 
 fn color (r: &Ray, world: &Hittable, depth: u64) -> Vec3 {
     let mut rec: HitRecord = HitRecord::new();
@@ -97,6 +100,9 @@ fn main() {
 
     let world: HittableList = random_scene();
 
+    let bar = ProgressBar::new(nx*ny);
+    bar.set_style(ProgressStyle::default_bar().template("[{elapsed} elapsed] {wide_bar:.cyan/white} {percent}% [{eta} remaining] [rendering]"));
+
     let scene: Vec<Vec<Vec3>> = (0..ny).into_par_iter().map(|y_rev| {
         let y: f64 = ny as f64 - y_rev as f64 - 1.0;
         let row: Vec<Vec3> = (0..nx).into_par_iter().map(|x| {
@@ -110,10 +116,13 @@ fn main() {
             color_vector = color_vector/ns as f64;
             color_vector = 255.99*Vec3::new(color_vector.r().sqrt(), color_vector.g().sqrt(), color_vector.b().sqrt());
             color_vector.colorize();
+            bar.inc(1);
             color_vector
         }).collect();
         row
     }).collect();
+
+    bar.finish();
 
     gen_ppm(scene, filename);
 }

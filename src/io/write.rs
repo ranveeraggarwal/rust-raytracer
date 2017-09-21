@@ -7,11 +7,18 @@ use std::io::prelude::*;
 use std::fs::File;
 use std::path::Path;
 
+use indicatif::{ProgressBar, ProgressStyle};
+
 pub fn gen_ppm (image: Vec<Vec<Vec3>>,
                 filename: String) -> () {
     let mut content = format!("P3\n{} {}\n255\n",
                               image[0].len(),
                               image.len());
+
+
+    let bar = ProgressBar::new((image.len() * image[0].len()) as u64);
+    bar.set_style(ProgressStyle::default_bar().template("[{elapsed} elapsed] {wide_bar:.cyan/white} {percent}% [{eta} remaining]    [saving]"));
+
     for row in image {
         for pixel in row {
             content = format!("{}{} {} {}\n",
@@ -19,8 +26,11 @@ pub fn gen_ppm (image: Vec<Vec<Vec3>>,
                               pixel.r().to_string(),
                               pixel.g().to_string(),
                               pixel.b().to_string());
+            bar.inc(1);
         }
     }
+
+    bar.finish();
 
     // Time to write to image file!
     let path = Path::new(&filename);
