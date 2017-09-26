@@ -26,7 +26,7 @@ fn refract(v: &Vec3, n: &Vec3, ni_over_nt: f64, refracted: &mut Vec3) -> bool {
 
     let discriminant: f64 = 1.0 - ni_over_nt*ni_over_nt*(1.0 - dt*dt);
     if discriminant > 0.0 {
-        *refracted = ni_over_nt*(*v - *n*dt) - *n*((discriminant).sqrt());
+        *refracted = ni_over_nt*(uv - *n*dt) - *n*((discriminant).sqrt());
         return true;
     } else {
         return false;
