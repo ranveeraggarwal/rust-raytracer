@@ -28,7 +28,7 @@ use indicatif::{ProgressBar, ProgressStyle};
 
 fn color (r: &Ray, world: &Hittable, depth: u64) -> Vec3 {
     let mut rec: HitRecord = HitRecord::new();
-    if world.intersect(&r, 0.0, f64::MAX, &mut rec)  {
+    if world.intersect(&r, 0.0001, f64::MAX, &mut rec)  {
         let mut scattered: Ray = Ray::new(Vec3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 0.0, 0.0));
         let mut attenuation: Vec3 = Vec3::new(0.0, 0.0, 0.0);
         if depth > 0 && rec.material().scatter(r, &mut rec, &mut attenuation, &mut scattered) {

@@ -26,7 +26,7 @@ use indicatif::{ProgressBar, ProgressStyle};
 
 fn color (r: &Ray, world: &Hittable, depth: u64) -> Vec3 {
     let mut rec: HitRecord = HitRecord::new();
-    if world.intersect(&r, 0.0, f64::MAX, &mut rec)  {
+    if world.intersect(&r, 0.0001, f64::MAX, &mut rec)  {
         let mut scattered: Ray = Ray::new(Vec3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 0.0, 0.0));
         let mut attenuation: Vec3 = Vec3::new(0.0, 0.0, 0.0);
         if depth > 0 && rec.material().scatter(r, &mut rec, &mut attenuation, &mut scattered) {
@@ -49,8 +49,8 @@ fn main() {
     let ny: u64 = 200;
     let ns: u64 = 200;
 
-    let cam: Camera = Camera::new(Vec3::new(3.0, 3.0, 2.0), Vec3::new(0.0, 0.0, -1.0), 
-    Vec3::new(0.0, 1.0, 0.0), 50.0, (nx as f64)/(ny as f64), 2.0, Vec3::new(3.0, 3.0, 3.0).length());
+    let cam: Camera = Camera::new(Vec3::new(0.0, 1.0, 5.0), Vec3::new(0.0, 0.0, -1.0), 
+    Vec3::new(0.0, 1.0, 0.0), 50.0, (nx as f64)/(ny as f64), 0.001, Vec3::new(3.0, 3.0, 3.0).length());
 
     let lambert_1: Lambertian = Lambertian::new(Vec3::new(0.1, 0.2, 0.5));
     let sphere1_center: Vec3 = Vec3::new(0.0, 0.0, -1.0);
@@ -65,8 +65,8 @@ fn main() {
     let sphere_3: Sphere = Sphere::new(sphere3_center, 0.5, Material::Metal(metal_1));
 
     let die_1: Dielectric = Dielectric::new(1.5);
-    let sphere4_center: Vec3 = Vec3::new(-1.0, 0.0, -1.0);
-    let sphere_4: Sphere = Sphere::new(sphere4_center, -0.45, Material::Dielectric(die_1));
+    let sphere4_center: Vec3 = Vec3::new(0.0, 0.0, 1.0);
+    let sphere_4: Sphere = Sphere::new(sphere4_center, 0.75, Material::Dielectric(die_1));
 
     let mut world: HittableList = HittableList::new();
     world.add_sphere(sphere_1);
