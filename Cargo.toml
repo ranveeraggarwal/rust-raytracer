@@ -7,3 +7,4 @@ authors = ["Ranveer Aggarwal <ranveerag2arwal@gmail.com>"]
 indicatif = "0.7.0"
 rand = "0.3"
 rayon = "0.8.2"
+image = "*"

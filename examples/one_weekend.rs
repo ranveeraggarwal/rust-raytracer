@@ -89,7 +89,7 @@ fn random_scene() -> HittableList {
 }
 
 fn main() {
-    let filename = "outputs/one_weekend.ppm".to_string();
+    let filename = "outputs/one_weekend.png".to_string();
 
     let nx: u64 = 480;
     let ny: u64 = 320;

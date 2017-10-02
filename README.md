@@ -30,4 +30,4 @@ Single-threaded implementation complete. 1200x800 image at 10 samples took nearl
 Image generated after running 504 random spheres at 1000 samples.    
 CPU: Intel Xeon E5-1650 v2: 6 cores/12 threads.
 
-![One Weekend](outputs/one_weekend.jpg "One Weekend")
+![One Weekend](outputs/one_weekend.png "One Weekend")

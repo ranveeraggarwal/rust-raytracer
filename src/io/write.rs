@@ -1,3 +1,5 @@
+extern crate image;
+
 use structures::vec3::Vec3;
 #[cfg(test)]
 use structures::ray::Ray;
@@ -9,32 +11,30 @@ use std::path::Path;
 
 use indicatif::{ProgressBar, ProgressStyle};
 
-pub fn gen_ppm(image: Vec<Vec<Vec3>>, filename: String) -> () {
+pub fn gen_ppm(img: Vec<Vec<Vec3>>, filename: String) -> () {
 
     // Time to write to image file!
     let path = Path::new(&filename);
     let display = path.display();
+    let sizey = img.len() as u32;
+    let sizex = img[0].len() as u32;
+    let mut imgbuf = image::ImageBuffer::new(sizex, sizey);
 
-    // Open a file in write-only mode, returns `io::Result<File>`
-    let mut file = match File::create(&path) {
-        Err(why) => panic!("couldn't create {}: {}", display, why.description()),
-        Ok(file) => file,
-    };
-
-    write!(file, "P3\n{} {}\n255\n", image[0].len(), image.len()).expect("saving to file failed.");
-
-    let bar = ProgressBar::new((image.len()) as u64);
+    let bar = ProgressBar::new((img.len()) as u64);
     bar.set_style(ProgressStyle::default_bar().template(
-        "[{elapsed} elapsed] {wide_bar:.cyan/white} {percent}% [{eta} remaining]    [saving]",
+        "[{elapsed} elapsed] {wide_bar:.cyan/white} {percent}% [{eta} remaining]    [writing to file]",
     ));
 
-    for row in image {
-        for pixel in row {
-            write!(file, "{} {} {}\n", pixel.r(), pixel.g(), pixel.b()).expect("saving to file failed.");
+    for (y, row) in img.iter().enumerate() {
+        for (x, pixel) in row.iter().enumerate() {
+            imgbuf.put_pixel(x as u32, y as u32, image::Rgb([pixel.r() as u8, pixel.g() as u8, pixel.b() as u8]));
         }
         bar.inc(1);
     }
 
+    let ref mut file = File::create(&path).unwrap();    
+    let _ = image::ImageRgb8(imgbuf).save(file, image::PNG);
+    
     bar.finish();
     println!("successfully wrote to {}", display);
 }
@@ -71,7 +71,7 @@ fn test_gen_ppm() {
         bg.push(row);
     }
 
-    let filename = "test.ppm".to_string();
+    let filename = "test.png".to_string();
     gen_ppm(bg, filename);
     assert!(true);
 

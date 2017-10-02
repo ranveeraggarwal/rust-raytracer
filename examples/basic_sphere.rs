@@ -43,7 +43,7 @@ fn color (r: &Ray, world: &Hittable, depth: u64) -> Vec3 {
 }
 
 fn main() {
-    let filename = "outputs/basic_sphere.ppm".to_string();
+    let filename = "outputs/basic_sphere.png".to_string();
 
     let nx: u64 = 400;
     let ny: u64 = 200;
