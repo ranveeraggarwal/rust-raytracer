@@ -91,9 +91,9 @@ fn random_scene() -> HittableList {
 fn main() {
     let filename = "outputs/one_weekend.png".to_string();
 
-    let nx: u64 = 480;
-    let ny: u64 = 320;
-    let ns: u64 = 100;
+    let nx: u64 = 1200;
+    let ny: u64 = 800;
+    let ns: u64 = 1000;
 
     let cam: Camera = Camera::new(Vec3::new(13.0, 2.0, 3.0), Vec3::new(0.0, 0.0, 0.0), 
     Vec3::new(0.0, 1.0, 0.0), 20.0, (nx as f64)/(ny as f64), 0.1, 10.0);
