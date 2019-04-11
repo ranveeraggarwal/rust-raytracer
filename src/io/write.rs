@@ -4,9 +4,6 @@ use structures::vec3::Vec3;
 #[cfg(test)]
 use structures::ray::Ray;
 
-use std::error::Error;
-use std::io::prelude::*;
-use std::fs::File;
 use std::path::Path;
 
 use indicatif::{ProgressBar, ProgressStyle};
@@ -32,8 +29,7 @@ pub fn gen_ppm(img: Vec<Vec<Vec3>>, filename: String) -> () {
         bar.inc(1);
     }
 
-    let ref mut file = File::create(&path).unwrap();    
-    let _ = image::ImageRgb8(imgbuf).save(file, image::PNG);
+    let _ = image::ImageRgb8(imgbuf).save(&path);
     
     bar.finish();
     println!("successfully wrote to {}", display);

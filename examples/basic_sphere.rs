@@ -81,7 +81,7 @@ fn main() {
         let y: f64 = ny as f64 - y_rev as f64 - 1.0;
         let row: Vec<Vec3> = (0..nx).into_par_iter().map(|x| {
             let mut color_vector: Vec3 = Vec3::new(0.0, 0.0, 0.0);
-            for s in 0..ns {
+            for _s in 0..ns {
                 let u: f64 = (x as f64 + rand::random::<f64>()) / nx as f64;
                 let v: f64 = (y as f64 + rand::random::<f64>()) / ny as f64;
                 let r: Ray = cam.get_ray(u, v);
