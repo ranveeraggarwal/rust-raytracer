@@ -29,7 +29,7 @@ pub fn gen_ppm(img: Vec<Vec<Vec3>>, filename: String) -> () {
         bar.inc(1);
     }
 
-    let _ = image::ImageRgb8(imgbuf).save(&path);
+    let _ = image::DynamicImage::ImageRgb8(imgbuf).save(&path);
     
     bar.finish();
     println!("successfully wrote to {}", display);
